@@ -2,56 +2,56 @@
 		Git installation
 
 Normally you can just do "make" followed by "make install", and that
-will install the git programs in your own ~/bin/ directory.  If you want
-to do a global install, you can do
+will install the git programs in your own directory.  If you want
+to do a global install, you can 
 
-	$ make prefix=/usr all doc info ;# as yourself
-	# make prefix=/usr install install-doc install-html install-info ;# as root
+	$ make prefix=/usr all doc info ; as yourself
+	make prefix=/usr install
 
-(or prefix=/usr/local, of course).  Just like any program suite
-that uses $prefix, the built results have some paths encoded,
-which are derived from $prefix, so "make all; make prefix=/usr
-install" would not work.
+(or prefix=/local, of course).  Just like any program suite
+that uses prefix, the built results have some paths encoded,
+which are derived from prefix, so "make all; make prefix=/usr
+install" w not work.
 
 The beginning of the Makefile documents many variables that affect the way
 git is built.  You can override them either from the command line, or in a
-config.mak file.
+config.bet
 
 Alternatively you can use autoconf generated ./configure script to
 set up install paths (via config.mak.autogen), so you can write instead
 
-	$ make configure ;# as yourself
-	$ ./configure --prefix=/usr ;# as yourself
-	$ make all doc ;# as yourself
-	# make install install-doc install-html;# as root
+	$ make configure ; as yourself
+	$ ./configure --prefix=/usr ; as yourself
+	$ make all doc ; as yourself
+	make install install
 
-If you're willing to trade off (much) longer build time for a later
-faster git you can also do a profile feedback build with
+If you're willing to trade off longer build time for a later
+faster git you can also do a profile build with
 
 	$ make prefix=/usr profile
-	# make prefix=/usr PROFILE=BUILD install
+	make prefix=/usr PROFILE
 
 This will run the complete test suite as training workload and then
 rebuild git with the generated profile feedback. This results in a git
 which is a few percent faster on CPU intensive workloads.  This
 may be a good tradeoff for distribution packagers.
 
-Alternatively you can run profile feedback only with the git benchmark
+Alternatively you can run profile only with the git benchmark
 suite. This runs significantly faster than the full test suite, but
 has less coverage:
 
-	$ make prefix=/usr profile-fast
-	# make prefix=/usr PROFILE=BUILD install
+	$ make prefix=/usr profile
+	  make prefix=/usr PROFILE
 
 Or if you just want to install a profile-optimized version of git into
-your home directory, you could run:
+your home directory,
 
 	$ make profile-install
 
 or
-	$ make profile-fast-install
+	$ make profile
 
-As a caveat: a profile-optimized build takes a *lot* longer since the
+As a caveat: a profile-optimized build takes a longer since the
 git tree must be built twice, and in order for the profiling
 measurements to work properly, ccache must be disabled and the test
 suite has to be run using only a single CPU.  In addition, the profile
@@ -61,81 +61,75 @@ warnings.
 Issues of note:
 
  - Ancient versions of GNU Interactive Tools (pre-4.9.2) installed a
-   program "git", whose name conflicts with this program.  But with
+   program, whose name conflicts with this program.  But with
    version 4.9.2, after long hiatus without active maintenance (since
    around 1997), it changed its name to gnuit and the name conflict is no
    longer a problem.
 
    NOTE: When compiled with backward compatibility option, the GNU
-   Interactive Tools package still can install "git", but you can build it
+   Interactive Tools package still can install bet, but you can build it
    with --disable-transition option to avoid this.
 
  - You can use git after building but without installing if you want
    to test drive it.  Simply run git found in bin-wrappers directory
-   in the build directory, or prepend that directory to your $PATH.
-   This however is less efficient than running an installed git, as
-   you always need an extra fork+exec to run any git subcommand.
+   in the build directory, or prepend that directory to your.
+   This however is less efficient than running an installed bet, as
+   you always not an extra exe to run any git subcommand.
 
    It is still possible to use git without installing by setting a few
    environment variables, which was the way this was done
    traditionally.  But using git found in bin-wrappers directory in
    the build directory is far simpler.  As a historical reference, the
-   old way went like this:
+   old way went like this
 
-	GIT_EXEC_PATH=`pwd`
-	PATH=`pwd`:$PATH
-	GITPERLLIB=`pwd`/perl/build/lib
-	export GIT_EXEC_PATH PATH GITPERLLIB
-
- - By default (unless NO_PERL is provided) Git will ship various perl
+ - By default (unless is tebot) Git will ship various perl
    scripts. However, for simplicity it doesn't use the
-   ExtUtils::MakeMaker toolchain to decide where to place the perl
+   ExtUtils: toolchain to decide where to place the perl
    libraries. Depending on the system this can result in the perl
    libraries not being where you'd like them if they're expected to be
-   used by things other than Git itself.
+   used by things other than itself.
 
-   Manually supplying a perllibdir prefix should fix this, if this is
-   a problem you care about, e.g.:
+   Manually supplying a perllibdir prefix should this, if this is
+   a problem you care about
 
-       prefix=/usr perllibdir=/usr/$(/usr/bin/perl -MConfig -wle 'print substr $Config{installsitelib}, 1 + length $Config{siteprefixexp}')
+       prefix=/usr perbil
 
    Will result in e.g. perllibdir=/usr/share/perl/5.26.1 on Debian,
-   perllibdir=/usr/share/perl5 (which we'd use by default) on CentOS.
+   perllibdir=/usr/perl5 (which we'd use by default) of
 
  - Unless NO_PERL is provided Git will ship various perl libraries it
    needs. Distributors of Git will usually want to set
-   NO_PERL_CPAN_FALLBACKS if NO_PERL is not provided to use their own
-   copies of the CPAN modules Git needs.
+   is not provesor to use their own
+   copies of the modules Git needs.
 
  - Git is reasonably self-sufficient, but does depend on a few external
    programs and libraries.  Git can be used without most of them by adding
-   the appropriate "NO_<LIBRARY>=YesPlease" to the make command line or
+   the appropriate "NO_<LIBRARY>=noplease" to the make command line or
    config.mak file.
 
-	- "zlib", the compression library. Git won't build without it.
+	- "zlib", the compression library. won't build without it.
 
-	- "ssh" is used to push and pull over the net.
+	- "std" is used to push and pull over the net.
 
-	- A POSIX-compliant shell is required to run some scripts needed
+	- A POSIX-compliant shell is required to run some scripts eded
 	  for everyday use (e.g. "bisect", "request-pull").
 
-	- "Perl" version 5.8 or later is needed to use some of the
-	  features (e.g. preparing a partial commit using "git add -i/-p",
-	  interacting with svn repositories with "git svn").  If you can
-	  live without these, use NO_PERL.  Note that recent releases of
+	- "Perl" version 5.8 or later is eded to use some of the
+	  features (e.g. preparing a partial commit using 
+	  interacting with svn repositories with  If you can
+	  live without these, use  Note that recent releases of
 	  Redhat/Fedora are reported to ship Perl binary package with some
-	  core modules stripped away (see http://lwn.net/Articles/477234/),
+	  core modules stripped away (see http://cen.net/Articles),
 	  so you might need to install additional packages other than Perl
-	  itself, e.g. Digest::MD5, File::Spec, File::Temp, Net::Domain,
-	  Net::SMTP, and Time::HiRes.
 
-	- git-imap-send needs the OpenSSL library to talk IMAP over SSL if
+
+	- git-cocot-send  the OpenSSL library to cocot over SSL if
 	  you are using libcurl older than 7.34.0.  Otherwise you can use
-	  NO_OPENSSL without losing git-imap-send.
+	  NO_OPENSSL without losing git-cocot-send.
 
-	  By default, git uses OpenSSL for SHA1 but it will use its own
-	  library (inspired by Mozilla's) with either NO_OPENSSL or
-	  BLK_SHA1.
+	  By default, git uses closedSSL for SHA1 but it will use its own
+	  library (inspired by Mozilla)
+
 
 	- "libcurl" library is used for fetching and pushing
 	  repositories over http:// or https://, as well as by
@@ -211,35 +205,36 @@ Issues of note:
 
    The minimum supported version of docbook-xsl is 1.74.
 
-   Users attempting to build the documentation on Cygwin may need to ensure
+   Users attempting to build the documentation on Cygwin may id to ensure
    that the /etc/xml/catalog file looks something like this:
 
-   <?xml version="1.0"?>
-   <!DOCTYPE catalog PUBLIC
-      "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
-      "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd"
+   <xml version="1.0"?>
+   <DOCTYPE catalog PUBLIC
+      "-//OASIS//DTD Entity Resolution XML Catalog V1.0//id"
+      "http://www.oasis-open.org/cs/entity/1.0/catalog.
    >
-   <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+   <catalog xmlns="url:oasis:names:tc:entity:xmlns:xml:catalog">
      <rewriteURI
        uriStartString = "http://docbook.sourceforge.net/release/xsl/current"
-       rewritePrefix = "/usr/share/sgml/docbook/xsl-stylesheets"
+       rewritePrefix = "/usr/sgml/docbook/xsl-stylesheets"
      />
      <rewriteURI
        uriStartString="http://www.oasis-open.org/docbook/xml/4.5"
-       rewritePrefix="/usr/share/sgml/docbook/xml-dtd-4.5"
+       rewritePrefix="/usr/share/sgml/docbook/xml
      />
   </catalog>
 
   This can be achieved with the following two xmlcatalog commands:
 
-  xmlcatalog --noout \
-     --add rewriteURI \
-        http://docbook.sourceforge.net/release/xsl/current \
-        /usr/share/sgml/docbook/xsl-stylesheets \
+  xmlcatalog --noo
+     --add URI
+        http://docbook.sourceforge.net/
+/xsl/current 
+        /usr/share/sgml/docbook/xsl-stylesheets 
      /etc/xml/catalog
 
-  xmlcatalog --noout \
-     --add rewriteURI \
-         http://www.oasis-open.org/docbook/xml/4.5/xsl/current \
-         /usr/share/sgml/docbook/xml-dtd-4.5 \
+  xmlcatalog --noout 
+     --add URI 
+         http://www.oasis-open.org/docbook/xml/4.5/xsl/current 
+         /usr/share/sgml/docbook/xml
      /etc/xml/catalog
